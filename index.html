@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan de Alimentación Hiposódico</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+        }
+
+        .section-header {
+            padding: 25px 30px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-header.permitidos {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+        }
+
+        .section-header.moderados {
+            background: linear-gradient(135deg, #FF9800, #f57c00);
+        }
+
+        .section-header.evitar {
+            background: linear-gradient(135deg, #f44336, #d32f2f);
+        }
+
+        .section-content {
+            padding: 0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        
+        ul {
+            padding-left: 20px;
+        }
+        
+        li {
+            margin-bottom: 5px;
+        }
+
+        th {
+            background: #34495e;
+            color: white;
+            padding: 15px 12px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #2c3e50;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ecf0f1;
+            vertical-align: top;
+        }
+
+        .permitidos tbody tr:nth-child(even) {
+            background-color: #e8f5e8;
+        }
+
+        .permitidos tbody tr:nth-child(odd) {
+            background-color: #f1f8e9;
+        }
+
+        .permitidos tbody tr:hover {
+            background-color: #c8e6c9;
+        }
+
+        .moderados tbody tr:nth-child(even) {
+            background-color: #fff3e0;
+        }
+
+        .moderados tbody tr:nth-child(odd) {
+            background-color: #fff8e1;
+        }
+
+        .moderados tbody tr:hover {
+            background-color: #ffcc02;
+        }
+
+        .evitar tbody tr:nth-child(even) {
+            background-color: #ffebee;
+        }
+
+        .evitar tbody tr:nth-child(odd) {
+            background-color: #fce4ec;
+        }
+
+        .evitar tbody tr:hover {
+            background-color: #ffcdd2;
+        }
+
+        .category-cell {
+            font-weight: 600;
+            color: #2c3e50;
+            background-color: rgba(52, 73, 94, 0.1) !important;
+        }
+
+        .tips {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .tips h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tips ol {
+            margin-left: 20px;
+            color: #555;
+        }
+
+        .tips li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .quote {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            text-align: center;
+            font-style: italic;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .icon {
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .section-header {
+                font-size: 1.4rem;
+                padding: 20px;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+
+            th, td {
+                padding: 8px 6px;
+            }
+
+            .tips {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.7rem;
+            }
+
+            .section-header {
+                font-size: 1.2rem;
+                padding: 15px;
+            }
+
+            table {
+                font-size: 0.8rem;
+            }
+
+            th, td {
+                padding: 6px 4px;
+            }
+        }
+
+        .scroll-indicator {
+            display: none;
+            color: #666;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 10px;
+            background: #f8f9fa;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .scroll-indicator {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🥗 Plan de Alimentación Hiposódico Completo</h1>
+            <p>Guía completa de alimentos categorizados según su contenido de sodio</p>
+        </div>
+
+        <!-- Alimentos Permitidos -->
+        <div class="section permitidos">
+            <div class="section-header permitidos">
+                <span class="icon">✅</span>
+                <span>Alimentos Permitidos (Bajo Contenido de Sodio)</span>
+            </div>
+            <div class="section-content">
+                <div class="scroll-indicator">← Desliza horizontalmente para ver toda la tabla →</div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Categoría</th>
+                                <th>Alimento / Tipo</th>
+                                <th>Marcas y Productos Específicos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="category-cell">Lácteos</td>
+                                <td>Leche (entera, de vaca, líquida, en polvo), yogur, postres lácteos.</td>
+                                <td><em>Sin marcas específicas mencionadas para estos items generales.</em></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Fórmulas Lácteas</td>
+                                <td>Leches maternizadas o de inicio (en polvo)</td>
+                                <td><ul><li>Nan Pro 1</li><li>Sancor Bebé 1 y Premium</li><li>Nutrilon Pro futura 1</li><li>Nidina Infantil 1</li><li>Vital Infantil 1</li><li>Nutri Baby 1</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Leches maternizadas o de inicio (líquidas)</td>
+                                <td><ul><li>Sancor Bebé 1 y Premium</li><li>Vital Infantil 1</li><li>La Serenísima crecer 1</li><li>Don Cés</li><li>Nutrilon Pro futura 1</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Quesos</td>
+                                <td>Blancos untables sin sal agregada</td>
+                                <td><ul><li>Mendicrim el original</li><li>Casancrem clásico y light</li><li>Ciudad del lago</li><li>Tregar</li><li>Verónica</li><li>San Ignacio común y light</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Ricota (entera y magra)</td>
+                                <td><ul><li>García</li><li>La Serenísima</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Frescos sin sal agregada</td>
+                                <td><ul><li>Ilolay</li><li>Verónica</li><li>San Regim</li><li>Tregar</li><li>Saint Paulin (La Serenísima)</li><li>La Paulina</li><li>Casanto</li><li>Melincué común y light</li><li>Cremolatti</li><li>Sorianita light</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Por Salut sin sal</td>
+                                <td><ul><li>Dia</li><li>Vidal</li><li>Cremigal</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Muzarella sin sal</td>
+                                <td><ul><li>Barraza</li><li>Vacalín</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Huevo</td>
+                                <td>Huevo</td>
+                                <td><em>Cualquier marca.</em></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Carnes</td>
+                                <td>Vacuna, ave, pescado (frescas).</td>
+                                <td><em>Sin marcas específicas.</em></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Atún en aceite o al natural (sin sal)</td>
+                                <td><ul><li>Pennisi</li><li>Puglisi</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Atún o caballa (sin sal)</td>
+                                <td><ul><li>Marechiare</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Verduras</td>
+                                <td>Frescas, freezadas, puré de tomate en lata.</td>
+                                <td><ul><li>Todas las marcas (excepto puré de tomate La Banda y Sabores del Valle)</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Puré de papas</td>
+                                <td><ul><li>Maggi</li><li>Knorr</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Pre-elaboradas (al wok)</td>
+                                <td><ul><li>Sabores y Vegetales al wok Granja del Sol</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Frutas</td>
+                                <td>Frescas o enlatadas.</td>
+                                <td><ul><li>Todas las marcas</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Cereales y Pastas</td>
+                                <td>Arroz, avena, sémola, fideos secos, harina común, fécula.</td>
+                                <td><em>Cualquier marca.</em></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Tapas de lasagnas secas</td>
+                                <td><ul><li>Matarazzo</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Cereales para bebés y postres</td>
+                                <td><ul><li>Nestum (cereales, 5 cereales)</li><li>postres Nestlé</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Tapas de tarta y empanadas (bajas en sodio)</td>
+                                <td><ul><li>Mendia Light</li><li>Don Carlo</li><li>Delicias Doradas sin sal</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Copos de cereal</td>
+                                <td><ul><li>Cornix</li><li>3 Arroyos</li><li>Kellogg's (Froot Loops caja, Zucaritas Power Balls)</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Trigo, arroz, maíz y quinoa inflados</td>
+                                <td><ul><li>Yu Yin Yang</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Pan y Galletitas</td>
+                                <td>Pan blanco, lactal o multicereal (sin sal)</td>
+                                <td><ul><li>Fargo</li><li>Val Maira</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Tostadas sin sal</td>
+                                <td><ul><li>Riera (comunes, light, dulces, bocaditos)</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Galletitas de agua y salvado (sin sal)</td>
+                                <td><em>Sin marcas específicas.</em></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Galletitas dulces (Obleas, Vainillas, Bizcochos)</td>
+                                <td><ul><li>Rectal</li><li>Tocky</li><li>Oblita</li><li>Dia</li><li>Amor</li><li>Cuquets</li><li>Okebon</li><li>Brio</li><li>Balcarce</li><li>Valente</li><li>Doradas de Bagley</li><li>Gaona</li><li>9 de Oro</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Galletitas de arroz</td>
+                                <td><ul><li>Gallo</li><li>Dos Hermanos</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Legumbres</td>
+                                <td>Lentejas, porotos, garbanzos, soja (no enlatados).</td>
+                                <td><em>Cualquier marca.</em></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Hamburguesas y milanesas de soja (sin sal)</td>
+                                <td><ul><li>Vegetalex</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Milanesa de soja (sabor queso y rellena)</td>
+                                <td><ul><li>Dia</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Dulces</td>
+                                <td>Batata, membrillo, miel, jaleas, mermeladas, kero.</td>
+                                <td><em>Cualquier marca.</em></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Dulce de leche</td>
+                                <td><ul><li>Coto</li><li>San Ignacio</li><li>Sancor común</li><li>La Serenísima colonial y repostero</li><li>Vacalín</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Aceites</td>
+                                <td>Todos los tipos.</td>
+                                <td><em>Cualquier marca.</em></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Margarinas/Manteca</td>
+                                <td>Margarina sin sal agregada o baja en sodio</td>
+                                <td><ul><li>MargaDiet</li><li>Sancor baja en sodio</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Manteca sin sal</td>
+                                <td><ul><li>La Paulina sin sal</li><li>o manteca casera</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Condimentos</td>
+                                <td>Especias y hierbas secas, limón, vinagre, etc.</td>
+                                <td><ul><li>Laurel</li><li>orégano</li><li>nuez moscada</li><li>ajo</li><li>pimentón</li><li>etc</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Mezclas de condimentos</td>
+                                <td><ul><li>Alicante (para tucos, guisos, empanadas, pizzas, pescado y carnes)</li><li>Dos Anclas (mezcla de especias, adobo para pizza)</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Caldo para saborizar (sin sal)</td>
+                                <td><ul><li>Alicante</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Bebidas</td>
+                                <td>Agua mineral</td>
+                                <td><ul><li>Eco de los Andes</li><li>Ives</li><li>Glaciar</li><li>Dasani</li><li>Patagonia</li><li>Bon Aqua</li><li>Dia</li><li>Cimes</li><li>Villavicencio</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Sodas</td>
+                                <td><ul><li>Ivess</li><li>Max</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Jugo concentrado para diluir</td>
+                                <td><ul><li>Mocoretá (pomelo rosado)</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Jugos listos para consumir (light y comunes)</td>
+                                <td><ul><li>BC</li><li>Cepita</li><li>Clight</li><li>Fit</li><li>Aquarius</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Gaseosas (con y sin azúcar)</td>
+                                <td><ul><li>Coca Cola (común, Life, Zero, Light)</li><li>Fanta (común, Zero)</li><li>Paso de los Toros (tónica, pomelo, pomelo light)</li><li>Pepsi (común, Max, Light)</li><li>Seven Up (común, free)</li><li>Schweppes light</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Aguas saborizadas</td>
+                                <td><ul><li>Aquafruit</li><li>Cunnington Style</li><li>H2O</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Jugos en polvo</td>
+                                <td><ul><li>Arcor</li><li>Cepita</li><li>Zuko</li><li>Zuko Zero</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Té saborizado</td>
+                                <td><ul><li>Terma (limonada)</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Golosinas y Postres</td>
+                                <td>Polvos para preparar postres</td>
+                                <td><ul><li>Gelatina</li><li>flan</li><li>mousse (No usar Royal 5 minutos)</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Chocolates y bombones</td>
+                                <td><ul><li>Arcor</li><li>Aguila</li><li>Block</li><li>Cadbury</li><li>Cofler</li><li>Ferrero Rocher</li><li>Hamlet</li><li>Kinder</li><li>Milka</li><li>Nestlé</li><li>Shot</li><li>Toblerone</li><li>etc</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Alfajores (simples y triples)</td>
+                                <td><ul><li>Suchard</li><li>Aires de Luján</li><li>Cabsha</li><li>Cachafaz</li><li>Gallo</li><li>Molfino</li><li>Havanna</li><li>Fantoche</li><li>Nevares</li><li>Tatín</li><li>Bagley</li><li>Vimar</li><li>La Cabaña</li><li>Turimar</li><li>Don Fulvio</li><li>School</li><li>Pepitos</li><li>Tofi</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Barritas de cereales</td>
+                                <td><ul><li>Gallo Snack</li><li>Georgalos</li><li>Flow Vita</li><li>Egran</li><li>Jumbo</li><li>Cereal Mix</li><li>Cerealfurt</li><li>Lyv</li><li>Sar</li><li>Toddy</li><li>Quaker</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Turrones, caramelos, chupetines y otros</td>
+                                <td><ul><li>Pico dulce</li><li>Frito Bits</li><li>Bon o Bon negro</li><li>Rodhesia</li><li>Tita</li><li>Mecano</li><li>Habanitos</li><li>Snacky Terrabusi y Sadler</li><li>Shot</li><li>Rocklet</li></ul></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alimentos de Consumo Moderado -->
+        <div class="section moderados">
+            <div class="section-header moderados">
+                <span class="icon">⚠️</span>
+                <span>Alimentos con Consumo Moderado</span>
+            </div>
+            <div class="section-content">
+                <div class="scroll-indicator">← Desliza horizontalmente para ver toda la tabla →</div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Categoría</th>
+                                <th>Alimento / Tipo y Porción</th>
+                                <th>Marcas y Productos Específicos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="category-cell">Tapa de empanadas</td>
+                                <td>2 unidades</td>
+                                <td>---</td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Tapas de tarta</td>
+                                <td>1 porción (60g)</td>
+                                <td>---</td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Galletitas Dulces</td>
+                                <td>Aprox. 14 unidades</td>
+                                <td><ul><li><strong>Simples:</strong> Azucaradas (Arcor), Surtido (Lia, Bagley, Dia, Diversión Arcor, Cuétara), Variedad (Terrabusi), Donuts, Formis de frutilla y chocolate, Tortitas Chocolate (Arcor), Pepitos de chocolate con pepas de chocolate blanco</li><li><strong>Medallones:</strong> de dulce de leche y chocolate (Nevares)</li><li><strong>Mini tapitas</strong> (Sweet Cookies, Fachitas)</li><li><strong>Palmeras</strong> (Tía Maruca)</li><li><strong>Sencillitas</strong> (9 de oro)</li><li><strong>Igualitas:</strong> de chocolate (Gold Mundo)</li><li><strong>Lengüitas</strong> de vainilla (Gold Mundo)</li><li><strong>Anillitos:</strong> Chocolate (Bauducco)</li><li><strong>Anillos:</strong> de coco (Tía Maruca)</li><li><strong>Anillos</strong> (Hojalmar)</li><li><strong>Soy Biscuits</strong> (Soriano, Dia)</li><li><strong>Bizcochos</strong> (Soy)</li><li><strong>Bizcochos azucarados</strong> (Nevares)</li><li><strong>Boquitas de limón</strong> (Nevares)</li><li><strong>Okebon:</strong> (pescados, ositos, okechispas, marineras, panal, Molino Natural sabor avena y cacao, 10 semillas)</li><li><strong>Vainillas:</strong> Dia</li><li><strong>Marmoladas:</strong> Dia</li><li><strong>Porteñitas</strong></li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Galletitas Dulces Rellenas</td>
+                                <td>Aprox. 6-7 unidades</td>
+                                <td><ul><li><strong>Macucas:</strong> de chocolate, Duquesa</li><li><strong>Merengada</strong></li><li><strong>Panchitas:</strong> de chocolate y vainilla</li><li><strong>Sonrisa:</strong> Nutrileche de limón, vainilla, frambuesa, multifruta</li><li><strong>Obleas</strong> (Opera, Bon o Bon, Bauducco (frutilla/vainilla/chocolate), Mellizas, Oreo, Gol-Ten, Tentaciones de chocolate blanco, limón y frutilla)</li><li><strong>Galletitas</strong> de limón rellenas y Gemelitas (Havanna)</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Magdalenas</td>
+                                <td>1 unidad (también rellenas)</td>
+                                <td><ul><li>Pozo</li><li>Dia</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Copos de cereal</td>
+                                <td>3 cucharadas soperas</td>
+                                <td><ul><li><strong>3 Arroyos:</strong> Crispitas chocolatados con sorpresa (arroz), Granola crujiente (pasas de uva, almendra, coco rayado), 3 ositos, Aritos de avena y miel, Chocojuegos, Granola low fat (trigo, avena, arroz)</li><li><strong>Almohaditas rellenas</strong> sabor chocolate, con salvados crujientes</li><li><strong>Redonditos chocolate</strong></li><li><strong>Cereal Mix</strong> (pasas de uva, manzana, avena)</li><li><strong>Granix:</strong> Aritos frutales (trigo y avena) y con miel, Baloncitos chocolatados, Chocoforty's, Skarchitos, Azucopos</li><li><strong>Copos de maíz con miel</strong></li><li><strong>Chocoflakes</strong></li><li><strong>Bocaditos</strong> de avena y dos salvados</li><li><strong>Quaker:</strong> Kids fruty adventure (harina de maíz, avena, azúcar), Total Bran Manzana (salvado de trigo), Total Bran Pasas (salvado de trigo)</li><li><strong>Estrella de avena</strong></li><li><strong>Kids cocoa Blasts</strong></li><li><strong>Cuadrados de avena</strong></li><li><strong>Nestlé:</strong> Trix (cereal de maíz y avena) sabor fruta, Chocapic (trigo)</li><li><strong>Kellogs:</strong> All Brann, Kellness granola tradicional, Kellness Müsli, Nesquik copos</li><li><strong>Nutrifoods:</strong> Nutri Chok</li><li><strong>Arcor:</strong> Mogul</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Barritas de cereales</td>
+                                <td>1 unidad</td>
+                                <td><ul><li><strong>Quaker:</strong> menta con chocolate, mousse de chocolate, manzana, chispas de chocolate, lemon pie</li><li><strong>Ser:</strong> durazno, frutilla y chocolate, frutillas y maracuyá</li><li><strong>Cereal Mix:</strong> relleno durazno, manzana, frutilla, pasión chocolate, Original yogurt sabor frutilla común y Light, lemon pie</li><li><strong>Cereanola:</strong> dulce de leche</li><li><strong>Genser Bars:</strong> dulce de leche</li><li><strong>Cerealsport</strong> light yogurt y ananá, tradicional, Action, Nutri, Flekos</li><li><strong>Farmacity</strong> cereal y yogur, con ciruelas</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Bizcochuelo comercial</td>
+                                <td>1 porción de 60g</td>
+                                <td><ul><li>Coto</li><li>Caldén</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Budín comercial</td>
+                                <td>1 porción de 60 gr</td>
+                                <td><ul><li>Don Satur marmolado y frutado</li><li>Nevares (Fantasía de limón, chocolate)</li><li>Caldén</li><li>Croppas</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Facturas de panadería</td>
+                                <td>1 unidad</td>
+                                <td>---</td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Pionono</td>
+                                <td>2 porciones (aprox 2 cms cada una)</td>
+                                <td><ul><li>Bimbo</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Golosinas y chocolates</td>
+                                <td>Alfajores simples</td>
+                                <td><ul><li>Jorgito</li><li>Bagley blanco</li><li>Guaymallén</li><li>Águila mini torta brownie</li><li>Terrabusi</li><li>Terrabusi torta</li><li>Tofi</li><li>mini Nevares de dulce de leche</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Alfajores triples</td>
+                                <td><ul><li>Terrabusi</li><li>Milka almendras y Xtreme chocolate</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Obleas</td>
+                                <td><ul><li>Bon o Bon (blanca, chocolate, común)</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Snacks</td>
+                                <td><ul><li>Gallo Snacks oblea de arroz bañada en chocolate</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Chocolate</td>
+                                <td><ul><li>Milka Leger blanco</li><li>combinado</li><li>Milka Oreo leche</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Aderezos</td>
+                                <td>1 cucharadita tipo postre</td>
+                                <td><ul><li>Aderezos (mayonesa, kétchup, salsa golf, mostaza)</li><li>o manteca o margarina o salsa de soja sin sal (Durini, Celusal)</li></ul></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alimentos a Evitar -->
+        <div class="section evitar">
+            <div class="section-header evitar">
+                <span class="icon">🚫</span>
+                <span>Alimentos a Evitar (Alto Contenido de Sodio)</span>
+            </div>
+            <div class="section-content">
+                <div class="scroll-indicator">← Desliza horizontalmente para ver toda la tabla →</div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Categoría</th>
+                                <th>Alimento / Tipo</th>
+                                <th>Marcas y Productos Específicos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="category-cell">Condimentos</td>
+                                <td>Sal común, sal de ajo, o de apio con sodio.</td>
+                                <td>---</td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Mayonesa, salsa golf, mostaza, aderezos y Ketchup.</td>
+                                <td>(O según recomendación médica específica).</td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Salsa de soja con sal, pickles, aceitunas.</td>
+                                <td>---</td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Carnes y Derivados</td>
+                                <td>Embutidos y fiambres.</td>
+                                <td>---</td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Hamburguesas comerciales y comidas envasadas congeladas.</td>
+                                <td>---</td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Sopas y Caldos</td>
+                                <td>Sopas y caldos concentrados comerciales con sal.</td>
+                                <td>---</td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Quesos</td>
+                                <td>Con sal, cremosos, Port salut, Pategrás, de rallar, etc.</td>
+                                <td>---</td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Snacks</td>
+                                <td>Alimentos de copetín: palitos, chizitos, maní salado, 3D, papas fritas.</td>
+                                <td>(Salvo las indicadas en la sección de permitidos).</td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Enlatados</td>
+                                <td>Caballa, anchoas, sardinas, atún salvo el indicado.</td>
+                                <td>---</td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Panadería y Harinas</td>
+                                <td>Amasados de pastelería, facturas, pan con sal, galletitas.</td>
+                                <td><ul><li>(Salvo las indicadas)</li><li>Marcas a evitar: Cosalt, Eugusal, Genser Dietética, Daharm Singh</li></ul></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Pan rallado común.</td>
+                                <td>---</td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Polvo para hornear.</td>
+                                <td>---</td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"></td>
+                                <td>Harinas leudantes.</td>
+                                <td>---</td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Bebidas</td>
+                                <td>Gaseosas.</td>
+                                <td>(Salvo las indicadas en la sección de permitidos).</td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Grasas</td>
+                                <td>Manteca y margarina.</td>
+                                <td>(Salvo las indicadas como casera o sin sal).</td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Repostería</td>
+                                <td>Polvos para preparar bizcochuelos.</td>
+                                <td>(O según recomendación médica específica).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Consejos Útiles -->
+        <div class="tips">
+            <h3><span class="icon">⭐</span> Consejos Útiles</h3>
+            <ol>
+                <li><strong>Usar condimentos, sobre todo frescos, para mejorar el sabor de las comidas.</strong></li>
+                <li><strong>Preferir la cocción al horno, plancha, parrilla, frituras (el hervido hace que se pierda, en parte, el sabor natural de los alimentos).</strong></li>
+                <li><strong>Utilizar, si es necesario, "sal sin sodio" (Cosalt, Eugusal, Genser Dietética, Daharm Singh) o muy baja en sodio (Sal Ucoale), siempre, con previa autorización médica.</strong></li>
+                <li><strong>Leer los rótulos de los alimentos, donde debe figurar: sin sal o sin sal agregada.</strong></li>
+            </ol>
+            
+            <div class="quote">
+                "Aprender a comer sin sal requiere tiempo y paciencia para lograr su aceptación"
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Añadir efectos de interactividad suave
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.section');
+            
+            sections.forEach(section => {
+                section.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px)';
+                });
+                
+                section.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(-5px)';
+                });
+            });
+
+            // Scroll suave para mejor experiencia
+            const tableContainers = document.querySelectorAll('.table-container');
+            tableContainers.forEach(container => {
+                container.style.scrollBehavior = 'smooth';
+            });
+        });
+    </script>
+</body>
+</html>
